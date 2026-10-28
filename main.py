@@ -13,6 +13,7 @@ JIRA_EMAIL = os.getenv("JIRA_EMAIL")
 JIRA_API_TOKEN = os.getenv("JIRA_API_TOKEN")
 JIRA_BOARD_NAME = os.getenv("JIRA_BOARD_NAME")
 TEAM_MEMBERS = os.getenv("TEAM_MEMBERS", "")  # Display Name:Slack ID
+FEMALE_MEMBERS = os.getenv("FEMALE_MEMBERS", "")  # Display Name,Display Name
 SLACK_CRED = os.getenv("SLACK_CRED")
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL")
 
@@ -68,9 +69,12 @@ def parse_team_members(raw_string):
             mapping[jira_name.strip()] = slack_id.strip()
     return mapping
 
+def parse_female_members(raw_string):
+    return {name.strip() for name in raw_string.split(",") if name.strip()}
+
 def get_member_emoji(jira_name):
     """Return emoji based on team member"""
-    female_members = ["Chatrin Pandiangan", "Sepriana Carolina"]
+    female_members = parse_female_members(FEMALE_MEMBERS)
     if jira_name in female_members:
         return ":female-technologist::skin-tone-2:"
     return ":male-technologist::skin-tone-2:"
